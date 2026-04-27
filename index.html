@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#1a5c38" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Mandya Guide" />
+<meta name="description" content="Explore tourist places around Mandya, Karnataka — in English and Kannada" />
+<link rel="manifest" href="manifest.json" />
+<title>Mandya Tourist Guide | ಮಂಡ್ಯ ಪ್ರವಾಸಿ ಮಾರ್ಗದರ್ಶಿ</title>
+<link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Noto+Sans+Kannada:wght@400;600;700&family=Mukta:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --green-dark: #1a5c38;
+    --green-mid: #2d8653;
+    --green-light: #4db87a;
+    --gold: #e8b84b;
+    --gold-light: #f5d78e;
+    --cream: #fef9f0;
+    --earth: #8b5e3c;
+    --text-dark: #1a1a1a;
+    --text-mid: #444;
+    --text-light: #888;
+    --card-bg: #ffffff;
+    --bg: #f5f0e8;
+    --shadow: 0 4px 20px rgba(0,0,0,0.12);
+    --radius: 18px;
+    --bottom-nav-height: 70px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Mukta', 'Noto Sans Kannada', sans-serif;
+    background: var(--bg);
+    color: var(--text-dark);
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding-bottom: var(--bottom-nav-height);
+  }
+
+  /* ===== TOP HEADER ===== */
+  .header {
+    background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+    padding: 48px 20px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: -20px;
+    width: 120px; height: 120px;
+    background: rgba(232,184,75,0.12);
+    border-radius: 50%;
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-icon {
+    width: 40px; height: 40px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .app-name {
+    font-family: 'Yatra One', cursive;
+    color: white;
+    font-size: 20px;
+    line-height: 1.1;
+  }
+  .app-name small {
+    display: block;
+    font-family: 'Noto Sans Kannada', sans-serif;
+    font-size: 13px;
+    color: var(--gold-light);
+    font-weight: 400;
+  }
+  .lang-toggle {
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.4);
+    border-radius: 30px;
+    padding: 6px 14px;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Mukta', sans-serif;
+  }
+  .lang-toggle:active { transform: scale(0.95); background: rgba(255,255,255,0.25); }
+
+  .search-bar {
+    background: white;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    gap: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    position: relative;
+    z-index: 1;
+  }
+  .search-bar input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 15px;
+    font-family: 'Mukta', 'Noto Sans Kannada', sans-serif;
+    color: var(--text-dark);
+    background: transparent;
+  }
+  .search-bar input::placeholder { color: var(--text-light); }
+  .search-icon { color: var(--green-mid); font-size: 18px; }
+
+  /* ===== SCREEN MANAGER ===== */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ===== HOME SCREEN ===== */
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title .kn { font-family: 'Noto Sans Kannada', sans-serif; font-size: 14px; color: var(--text-light); }
+
+  /* Category chips */
+  .categories {
+    padding: 20px 20px 0;
+    overflow-x: auto;
+    display: flex;
+    gap: 10px;
+    scrollbar-width: none;
+  }
+  .categories::-webkit-scrollbar { display: none; }
+  .cat-chip {
+    flex-shrink: 0;
+    background: white;
+    border: 2px solid transparent;
+    border-radius: 30px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    white-space: nowrap;
+  }
+  .cat-chip.active {
+    background: var(--green-dark);
+    color: white;
+    border-color: var(--green-dark);
+  }
+  .cat-chip:not(.active):active { transform: scale(0.95); }
+
+  /* Featured slider */
+  .featured-section { padding: 20px; }
+  .featured-scroll {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+  }
+  .featured-scroll::-webkit-scrollbar { display: none; }
+  .featured-card {
+    flex-shrink: 0;
+    width: 280px;
+    height: 190px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+    scroll-snap-align: start;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s;
+  }
+  .featured-card:active { transform: scale(0.97); }
+  .featured-card .bg {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0; left: 0;
+  }
+  .featured-card .overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.75));
+    padding: 40px 16px 16px;
+  }
+  .featured-card .place-name {
+    color: white;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .featured-card .place-kn {
+    color: rgba(255,255,255,0.8);
+    font-size: 13px;
+    font-family: 'Noto Sans Kannada', sans-serif;
+    margin-top: 2px;
+  }
+  .featured-card .badge {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: var(--gold);
+    color: #333;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 20px;
+    padding: 3px 10px;
+  }
+
+  /* Place grid */
+  .places-section { padding: 0 20px 20px; }
+  .places-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .place-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 3px 14px rgba(0,0,0,0.09);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .place-card:active { transform: scale(0.97); box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+  .place-card .emoji-img {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+  }
+  .place-card .card-info {
+    padding: 10px 12px 12px;
+  }
+  .place-card .card-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-dark);
+    line-height: 1.2;
+  }
+  .place-card .card-kn {
+    font-family: 'Noto Sans Kannada', sans-serif;
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+  .place-card .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--text-light);
+  }
+  .card-dist { color: var(--green-mid); font-weight: 600; }
+
+  /* ===== DETAIL SCREEN ===== */
+  .detail-screen { animation: slideUp 0.3s ease; }
+  @keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .detail-hero {
+    width: 100%;
+    height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 100px;
+    position: relative;
+  }
+  .back-btn {
+    position: absolute;
+    top: 52px; left: 16px;
+    background: rgba(255,255,255,0.9);
+    border: none;
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  }
+  .fav-btn {
+    position: absolute;
+    top: 52px; right: 16px;
+    background: rgba(255,255,255,0.9);
+    border: none;
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  }
+  .detail-body { padding: 20px; }
+  .detail-title { font-size: 26px; font-weight: 700; line-height: 1.2; }
+  .detail-kn {
+    font-family: 'Noto Sans Kannada', sans-serif;
+    font-size: 18px;
+    color: var(--green-mid);
+    margin-top: 4px;
+    font-weight: 600;
+  }
+  .detail-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0;
+  }
+  .tag {
+    background: #e8f5ee;
+    color: var(--green-dark);
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 20px;
+    padding: 4px 12px;
+  }
+  .info-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+  }
+  .info-row:last-child { border-bottom: none; }
+  .info-icon { font-size: 20px; width: 30px; text-align: center; }
+  .info-label { font-size: 12px; color: var(--text-light); }
+  .info-val { font-size: 14px; font-weight: 600; color: var(--text-dark); }
+  .info-val-kn { font-family: 'Noto Sans Kannada', sans-serif; font-size: 13px; color: var(--text-mid); }
+  .desc-section { margin: 20px 0; }
+  .desc-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+  .desc-text { font-size: 14px; line-height: 1.7; color: var(--text-mid); }
+  .desc-kn { font-family: 'Noto Sans Kannada', sans-serif; font-size: 14px; line-height: 1.8; color: var(--text-mid); margin-top: 10px; }
+  .action-btns {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .btn-primary {
+    flex: 1;
+    background: var(--green-dark);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'Mukta', sans-serif;
+  }
+  .btn-secondary {
+    background: white;
+    color: var(--green-dark);
+    border: 2px solid var(--green-dark);
+    border-radius: 14px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'Mukta', sans-serif;
+  }
+
+  /* ===== MAP SCREEN ===== */
+  .map-screen { padding: 0; }
+  .map-placeholder {
+    width: 100%;
+    height: calc(100vh - var(--bottom-nav-height) - 60px);
+    background: linear-gradient(135deg, #e8f4ee, #d0ead9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    font-size: 60px;
+  }
+  .map-list {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 40vh;
+    overflow-y: auto;
+  }
+  .map-item {
+    background: white;
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    cursor: pointer;
+  }
+  .map-item .mi-icon { font-size: 28px; }
+  .map-item .mi-name { font-size: 14px; font-weight: 700; }
+  .map-item .mi-kn { font-family: 'Noto Sans Kannada', sans-serif; font-size: 12px; color: var(--text-light); }
+  .map-item .mi-dist { margin-left: auto; font-size: 13px; color: var(--green-mid); font-weight: 600; }
+
+  /* ===== GUIDE SCREEN ===== */
+  .guide-screen { padding: 20px; }
+  .guide-card {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 3px 14px rgba(0,0,0,0.08);
+  }
+  .guide-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--green-dark);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .guide-card h3 .kn { font-family: 'Noto Sans Kannada', sans-serif; font-size: 14px; color: var(--text-light); font-weight: 400; }
+  .guide-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .guide-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .guide-item strong { color: var(--earth); }
+  .guide-kn { font-family: 'Noto Sans Kannada', sans-serif; font-size: 13px; color: var(--text-light); margin-top: 3px; }
+
+  /* ===== FAVORITES SCREEN ===== */
+  .fav-screen { padding: 20px; }
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-light);
+  }
+  .empty-state .big-icon { font-size: 64px; margin-bottom: 16px; }
+  .empty-state p { font-size: 15px; }
+  .empty-state .kn { font-family: 'Noto Sans Kannada', sans-serif; font-size: 14px; margin-top: 6px; }
+
+  /* ===== BOTTOM NAV ===== */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: var(--bottom-nav-height);
+    background: white;
+    border-top: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 100;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+  }
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 8px 0;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .nav-item .nav-icon { font-size: 24px; }
+  .nav-item .nav-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-light);
+    font-family: 'Mukta', sans-serif;
+  }
+  .nav-item.active .nav-label { color: var(--green-dark); }
+  .nav-item.active .nav-icon { filter: drop-shadow(0 2px 4px rgba(26,92,56,0.4)); }
+  .nav-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--green-dark);
+    display: none;
+    margin-top: -2px;
+  }
+  .nav-item.active .nav-dot { display: block; }
+
+  /* ===== SECTION PADDING FIX ===== */
+  .main-content { padding-top: 0; }
+
+  /* Splash / colors for place cards */
+  .bg-temple { background: linear-gradient(135deg, #fff3cd, #ffe082); }
+  .bg-water { background: linear-gradient(135deg, #cce5ff, #90caf9); }
+  .bg-wildlife { background: linear-gradient(135deg, #d4edda, #81c784); }
+  .bg-heritage { background: linear-gradient(135deg, #fce4ec, #ef9a9a); }
+  .bg-farm { background: linear-gradient(135deg, #f3e5f5, #ce93d8); }
+  .bg-hills { background: linear-gradient(135deg, #e0f7fa, #80deea); }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--text-dark);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 13px;
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; }
+
+  /* Screen title bar */
+  .screen-title {
+    padding: 52px 20px 16px;
+    background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+    color: white;
+  }
+  .screen-title h2 { font-size: 22px; font-weight: 700; }
+  .screen-title p { font-family: 'Noto Sans Kannada', sans-serif; font-size: 14px; color: rgba(255,255,255,0.75); margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<!-- HOME SCREEN -->
+<div id="home" class="screen active">
+  <div class="header">
+    <div class="header-top">
+      <div class="header-logo">
+        <div class="logo-icon">🏛️</div>
+        <div class="app-name">
+          Mandya Guide
+          <small>ಮಂಡ್ಯ ಮಾರ್ಗದರ್ಶಿ</small>
+        </div>
+      </div>
+      <button class="lang-toggle" onclick="toggleLang()">
+        <span id="lang-label">ಕನ್ನಡ</span>
+      </button>
+    </div>
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search places... | ಸ್ಥಳ ಹುಡುಕಿ..." oninput="filterPlaces(this.value)" />
+    </div>
+  </div>
+
+  <div class="main-content">
+    <!-- Categories -->
+    <div class="categories" id="catList">
+      <div class="cat-chip active" onclick="filterCat('all', this)">🗺️ <span data-en="All" data-kn="ಎಲ್ಲಾ">All</span></div>
+      <div class="cat-chip" onclick="filterCat('temple', this)">🛕 <span data-en="Temples" data-kn="ದೇವಾಲಯ">Temples</span></div>
+      <div class="cat-chip" onclick="filterCat('water', this)">💧 <span data-en="Dams & Lakes" data-kn="ಅಣೆಕಟ್ಟು">Dams & Lakes</span></div>
+      <div class="cat-chip" onclick="filterCat('wildlife', this)">🐘 <span data-en="Wildlife" data-kn="ವನ್ಯಜೀವಿ">Wildlife</span></div>
+      <div class="cat-chip" onclick="filterCat('heritage', this)">🏛️ <span data-en="Heritage" data-kn="ಪರಂಪರೆ">Heritage</span></div>
+      <div class="cat-chip" onclick="filterCat('hills', this)">🏔️ <span data-en="Hills" data-kn="ಗುಡ್ಡ">Hills</span></div>
+    </div>
+
+    <!-- Featured -->
+    <div class="featured-section">
+      <div class="section-title">⭐ Featured <span class="kn">| ವಿಶೇಷ ಸ್ಥಳಗಳು</span></div>
+      <div class="featured-scroll" id="featuredList"></div>
+    </div>
+
+    <!-- All Places -->
+    <div class="places-section">
+      <div class="section-title">📍 All Places <span class="kn">| ಎಲ್ಲಾ ಸ್ಥಳಗಳು</span></div>
+      <div class="places-grid" id="placeGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL SCREEN -->
+<div id="detail" class="screen detail-screen">
+  <div class="detail-hero" id="detailHero">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <button class="fav-btn" id="favBtn" onclick="toggleFav()">🤍</button>
+    <span id="detailEmoji" style="font-size:90px"></span>
+  </div>
+  <div class="detail-body">
+    <div class="detail-title" id="detailTitle"></div>
+    <div class="detail-kn" id="detailKn"></div>
+    <div class="detail-tags" id="detailTags"></div>
+    <div class="info-row"><span class="info-icon">📍</span><div><div class="info-label" data-en="Distance from Mandya" data-kn="ಮಂಡ್ಯದಿಂದ ದೂರ">Distance from Mandya</div><div class="info-val" id="detailDist"></div><div class="info-val-kn" id="detailDistKn"></div></div></div>
+    <div class="info-row"><span class="info-icon">🕐</span><div><div class="info-label" data-en="Best Time to Visit" data-kn="ಭೇಟಿಗೆ ಉತ್ತಮ ಸಮಯ">Best Time</div><div class="info-val" id="detailTime"></div><div class="info-val-kn" id="detailTimeKn"></div></div></div>
+    <div class="info-row"><span class="info-icon">🎟️</span><div><div class="info-label" data-en="Entry Fee" data-kn="ಪ್ರವೇಶ ಶುಲ್ಕ">Entry Fee</div><div class="info-val" id="detailFee"></div></div></div>
+    <div class="desc-section">
+      <h3 data-en="About this Place" data-kn="ಈ ಸ್ಥಳದ ಬಗ್ಗೆ">About this Place</h3>
+      <div class="desc-text" id="detailDesc"></div>
+      <div class="desc-kn" id="detailDescKn"></div>
+    </div>
+    <div class="action-btns">
+      <button class="btn-primary" onclick="openMaps()">🗺️ Navigate</button>
+      <button class="btn-secondary" onclick="sharePlace()">📤 Share</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAP SCREEN -->
+<div id="mapScreen" class="screen">
+  <div class="screen-title">
+    <h2>📍 Explore Map</h2>
+    <p>ನಕ್ಷೆ ಮೇಲೆ ಅನ್ವೇಷಿಸಿ</p>
+  </div>
+  <div class="map-placeholder">
+    <div>🗺️</div>
+    <div style="font-size:16px;font-weight:700;color:var(--green-dark)">Open in Google Maps</div>
+    <div style="font-size:13px;color:var(--text-light);font-family:'Noto Sans Kannada'">Google Maps ನಲ್ಲಿ ತೆರೆಯಿರಿ</div>
+    <button class="btn-primary" style="font-size:14px;padding:12px 24px;border-radius:30px;margin-top:8px" onclick="openMandyaMaps()">📍 View Mandya Map</button>
+  </div>
+  <div style="padding:16px 20px 4px"><div class="section-title">📌 Quick Access <span class="kn">| ತ್ವರಿತ ಪ್ರವೇಶ</span></div></div>
+  <div class="map-list" id="mapList"></div>
+</div>
+
+<!-- GUIDE SCREEN -->
+<div id="guideScreen" class="screen">
+  <div class="screen-title">
+    <h2>📖 Travel Guide</h2>
+    <p>ಪ್ರಯಾಣ ಮಾರ್ಗದರ್ಶಿ</p>
+  </div>
+  <div class="guide-screen">
+    <div class="guide-card">
+      <h3>🚌 How to Reach Mandya <span class="kn">| ಮಂಡ್ಯ ತಲುಪುವುದು ಹೇಗೆ</span></h3>
+      <div class="guide-item"><strong>By Road:</strong> 100 km from Bengaluru via NH75. KSRTC buses available every 30 min.<div class="guide-kn">ರಸ್ತೆ ಮಾರ್ಗ: ಬೆಂಗಳೂರಿನಿಂದ 100 ಕಿಮೀ. KSRTC ಬಸ್ ಪ್ರತಿ 30 ನಿಮಿಷಕ್ಕೊಮ್ಮೆ</div></div>
+      <div class="guide-item"><strong>By Train:</strong> Mandya Railway Station is on Bengaluru–Mysuru line. Direct trains available.<div class="guide-kn">ರೈಲು: ಮಂಡ್ಯ ರೈಲ್ವೇ ನಿಲ್ದಾಣ ಬೆಂಗಳೂರು–ಮೈಸೂರು ಮಾರ್ಗದಲ್ಲಿದೆ</div></div>
+      <div class="guide-item"><strong>Nearest Airport:</strong> Kempegowda International Airport, Bengaluru (110 km).<div class="guide-kn">ಹತ್ತಿರದ ವಿಮಾನ ನಿಲ್ದಾಣ: ಬೆಂಗಳೂರು (110 ಕಿಮೀ)</div></div>
+    </div>
+    <div class="guide-card">
+      <h3>🌤️ Best Season to Visit <span class="kn">| ಭೇಟಿಗೆ ಉತ್ತಮ ಕಾಲ</span></h3>
+      <div class="guide-item"><strong>October – February:</strong> Pleasant weather, ideal for sightseeing and outdoor activities.<div class="guide-kn">ಅಕ್ಟೋಬರ್ – ಫೆಬ್ರವರಿ: ಸುಂದರ ವಾತಾವರಣ, ಭ್ರಮಣಕ್ಕೆ ಸೂಕ್ತ</div></div>
+      <div class="guide-item"><strong>June – September:</strong> Monsoon. Dams are full and scenic but roads can be slippery.<div class="guide-kn">ಜೂನ್ – ಸೆಪ್ಟೆಂಬರ್: ಮಳೆಗಾಲ. ಅಣೆಕಟ್ಟುಗಳು ತುಂಬಿ ಸುಂದರವಾಗಿರುತ್ತವೆ</div></div>
+      <div class="guide-item"><strong>March – May:</strong> Hot and dry. Carry water and avoid midday travel.<div class="guide-kn">ಮಾರ್ಚ್ – ಮೇ: ಬಿಸಿ ಹವಾಮಾನ. ನೀರು ಒಯ್ಯಿರಿ</div></div>
+    </div>
+    <div class="guide-card">
+      <h3>🍽️ Local Food to Try <span class="kn">| ಸ್ಥಳೀಯ ಆಹಾರ</span></h3>
+      <div class="guide-item"><strong>Sugarcane Juice:</strong> Mandya is Karnataka's sugar capital. Fresh juice everywhere!<div class="guide-kn">ಕಬ್ಬಿನ ರಸ: ಮಂಡ್ಯ ಕರ್ನಾಟಕದ ಸಕ್ಕರೆ ರಾಜಧಾನಿ. ತಾಜಾ ರಸ ಎಲ್ಲೆಡೆ ಸಿಗುತ್ತದೆ!</div></div>
+      <div class="guide-item"><strong>Ragi Mudde:</strong> Traditional staple made from finger millet, served with saaru.<div class="guide-kn">ರಾಗಿ ಮುದ್ದೆ: ಸಾರಿನೊಂದಿಗೆ ಬಡಿಸುವ ಸಾಂಪ್ರದಾಯಿಕ ಆಹಾರ</div></div>
+      <div class="guide-item"><strong>Holige (Puran Poli):</strong> Sweet stuffed flatbread, popular during festivals.<div class="guide-kn">ಹೋಳಿಗೆ: ಹಬ್ಬಗಳಲ್ಲಿ ಜನಪ್ರಿಯ ಸಿಹಿ ತಿನಿಸು</div></div>
+      <div class="guide-item"><strong>Akki Rotti:</strong> Rice flour flatbread with onion and chili – a breakfast favourite.<div class="guide-kn">ಅಕ್ಕಿ ರೊಟ್ಟಿ: ಉಪಹಾರದ ನೆಚ್ಚಿನ ತಿನಿಸು</div></div>
+    </div>
+    <div class="guide-card">
+      <h3>💡 Travel Tips <span class="kn">| ಪ್ರಯಾಣ ಸಲಹೆಗಳು</span></h3>
+      <div class="guide-item">📱 Save this app offline for use without internet.<div class="guide-kn">ಇಂಟರ್ನೆಟ್ ಇಲ್ಲದೆ ಬಳಸಲು ಈ ಅಪ್ಲಿಕೇಶನ್ ಅನ್ನು ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿ ಉಳಿಸಿ</div></div>
+      <div class="guide-item">🌿 Respect nature – avoid littering at dams and wildlife areas.<div class="guide-kn">ಪ್ರಕೃತಿಯನ್ನು ಗೌರವಿಸಿ – ಕಸ ಎಸೆಯಬೇಡಿ</div></div>
+      <div class="guide-item">👡 Wear comfortable footwear for temple visits and forest trails.<div class="guide-kn">ಮೆಟ್ಟಿಲು ಹತ್ತಲು ಸೂಕ್ತ ಚಪ್ಪಲಿ ಧರಿಸಿ</div></div>
+      <div class="guide-item">📷 Always ask permission before photographing locals.<div class="guide-kn">ಸ್ಥಳೀಯರ ಅನುಮತಿ ಪಡೆದ ನಂತರ ಫೋಟೋ ತೆಗೆಯಿರಿ</div></div>
+      <div class="guide-item">🚑 Emergency: Police 100 | Ambulance 108 | Fire 101<div class="guide-kn">ತುರ್ತು: ಪೋಲೀಸ್ 100 | ಆಂಬ್ಯುಲೆನ್ಸ್ 108 | ಅಗ್ನಿಶಾಮಕ 101</div></div>
+    </div>
+    <div class="guide-card">
+      <h3>🏨 Accommodation <span class="kn">| ವಸತಿ ಸೌಲಭ್ಯ</span></h3>
+      <div class="guide-item"><strong>Hotel Cauvery Regency</strong> – Mandya town, budget-friendly.<div class="guide-kn">ಮಂಡ್ಯ ಪಟ್ಟಣದಲ್ಲಿ, ಕಡಿಮೆ ದರದಲ್ಲಿ</div></div>
+      <div class="guide-item"><strong>KSTDC Hotels</strong> – Government-run, available near major tourist spots.<div class="guide-kn">ಪ್ರಮುಖ ಪ್ರವಾಸಿ ತಾಣಗಳ ಬಳಿ ಸರ್ಕಾರಿ ನಿರ್ವಹಣೆಯ ಹೋಟೆಲ್‌ಗಳು</div></div>
+      <div class="guide-item"><strong>Mysuru (30 km)</strong> – Wide range of hotels for all budgets nearby.<div class="guide-kn">ಮೈಸೂರು (30 ಕಿಮೀ) – ಎಲ್ಲಾ ಬಜೆಟ್‌ಗಳಿಗೂ ಹೋಟೆಲ್‌ಗಳು ಲಭ್ಯ</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FAVORITES SCREEN -->
+<div id="favScreen" class="screen">
+  <div class="screen-title">
+    <h2>❤️ Favourites</h2>
+    <p>ನೆಚ್ಚಿನ ಸ್ಥಳಗಳು</p>
+  </div>
+  <div class="fav-screen">
+    <div id="favList"></div>
+    <div class="empty-state" id="favEmpty" style="display:none">
+      <div class="big-icon">🤍</div>
+      <p>No saved places yet</p>
+      <p class="kn">ಇನ್ನೂ ಯಾವ ಸ್ಥಳವನ್ನೂ ಉಳಿಸಿಲ್ಲ</p>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <div class="nav-item active" onclick="showScreen('home',this)">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label" data-en="Home" data-kn="ಮುಖ್ಯ">Home</span>
+    <div class="nav-dot"></div>
+  </div>
+  <div class="nav-item" onclick="showScreen('mapScreen',this)">
+    <span class="nav-icon">🗺️</span>
+    <span class="nav-label" data-en="Map" data-kn="ನಕ್ಷೆ">Map</span>
+    <div class="nav-dot"></div>
+  </div>
+  <div class="nav-item" onclick="showScreen('guideScreen',this)">
+    <span class="nav-icon">📖</span>
+    <span class="nav-label" data-en="Guide" data-kn="ಮಾರ್ಗ">Guide</span>
+    <div class="nav-dot"></div>
+  </div>
+  <div class="nav-item" onclick="showScreen('favScreen',this)">
+    <span class="nav-icon">❤️</span>
+    <span class="nav-label" data-en="Saved" data-kn="ಉಳಿಸಿದ">Saved</span>
+    <div class="nav-dot"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== DATA =====
+const places = [
+  {
+    id: 1,
+    name: "KRS Dam (Krishnarajasagara)",
+    kn: "ಕೆಆರ್‌ಎಸ್ ಅಣೆಕಟ್ಟು",
+    category: "water",
+    emoji: "💧",
+    bgClass: "bg-water",
+    dist: "19 km",
+    distKn: "19 ಕಿಮೀ",
+    time: "Oct – Feb",
+    timeKn: "ಅಕ್ಟೋಬರ್ – ಫೆಬ್ರವರಿ",
+    fee: "₹30 per person",
+    tags: ["Dam", "Garden", "Boat Ride"],
+    desc: "The Krishnarajasagara Dam is one of the most famous dams in India, built across the Kaveri River. It houses the spectacular Brindavan Gardens — famous for its musical fountains that light up in the evening. A must-visit for families and nature lovers.",
+    descKn: "ಕೃಷ್ಣರಾಜಸಾಗರ ಅಣೆಕಟ್ಟು ಭಾರತದ ಅತ್ಯಂತ ಪ್ರಸಿದ್ಧ ಅಣೆಕಟ್ಟುಗಳಲ್ಲಿ ಒಂದು. ಇಲ್ಲಿ ಸಂಗೀತ ಕಾರಂಜಿ ಮತ್ತು ಬೃಂದಾವನ ಉದ್ಯಾನವಿದೆ. ಕುಟುಂಬ ಮತ್ತು ಪ್ರಕೃತಿ ಪ್ರೇಮಿಗಳಿಗೆ ಅತ್ಯಂತ ಸೂಕ್ತ.",
+    mapsUrl: "https://maps.google.com/?q=KRS+Dam+Mandya",
+    featured: true
+  },
+  {
+    id: 2,
+    name: "Ranganathittu Bird Sanctuary",
+    kn: "ರಂಗನತಿಟ್ಟು ಪಕ್ಷಿಧಾಮ",
+    category: "wildlife",
+    emoji: "🦅",
+    bgClass: "bg-wildlife",
+    dist: "16 km",
+    distKn: "16 ಕಿಮೀ",
+    time: "June – Nov",
+    timeKn: "ಜೂನ್ – ನವೆಂಬರ್",
+    fee: "₹100 per person",
+    tags: ["Birds", "Boat Ride", "Wildlife"],
+    desc: "Ranganathittu is Karnataka's largest bird sanctuary, spread across 6 islets on the Kaveri River. It is home to over 200 species of birds including painted storks, spoonbills, and cormorants. Boat rides through the sanctuary offer a close encounter with wildlife.",
+    descKn: "ರಂಗನತಿಟ್ಟು ಕರ್ನಾಟಕದ ಅತಿ ದೊಡ್ಡ ಪಕ್ಷಿಧಾಮ. ಕಾವೇರಿ ನದಿಯಲ್ಲಿ 6 ದ್ವೀಪಗಳಲ್ಲಿ ಹರಡಿದೆ. 200ಕ್ಕೂ ಹೆಚ್ಚು ಪಕ್ಷಿ ಪ್ರಜಾತಿಗಳ ತಾಣ.",
+    mapsUrl: "https://maps.google.com/?q=Ranganathittu+Bird+Sanctuary",
+    featured: true
+  },
+  {
+    id: 3,
+    name: "Melukote Temple",
+    kn: "ಮೇಲುಕೋಟೆ ದೇವಾಲಯ",
+    category: "temple",
+    emoji: "🛕",
+    bgClass: "bg-temple",
+    dist: "52 km",
+    distKn: "52 ಕಿಮೀ",
+    time: "Oct – March",
+    timeKn: "ಅಕ್ಟೋಬರ್ – ಮಾರ್ಚ್",
+    fee: "Free",
+    tags: ["Temple", "Hilltop", "Pilgrimage"],
+    desc: "Melukote is a sacred temple town situated on a rocky hill. The Cheluvanarayana Swamy temple dedicated to Lord Vishnu is the main attraction. The Vairamudi festival here draws lakhs of devotees. The scenic hilltop view of the surrounding countryside is breathtaking.",
+    descKn: "ಮೇಲುಕೋಟೆ ಒಂದು ಪವಿತ್ರ ದೇವಸ್ಥಾನ ಪಟ್ಟಣ. ಶ್ರೀ ಚೆಲುವನಾರಾಯಣಸ್ವಾಮಿ ದೇವಾಲಯ ಮತ್ತು ವೈರಮುಡಿ ಉತ್ಸವ ಪ್ರಸಿದ್ಧ. ಬೆಟ್ಟದ ತುದಿಯಿಂದ ಸುಂದರ ನೋಟ ಕಾಣಬಹುದು.",
+    mapsUrl: "https://maps.google.com/?q=Melukote+Temple+Karnataka",
+    featured: true
+  },
+  {
+    id: 4,
+    name: "Pandavapura",
+    kn: "ಪಾಂಡವಪುರ",
+    category: "heritage",
+    emoji: "🏛️",
+    bgClass: "bg-heritage",
+    dist: "25 km",
+    distKn: "25 ಕಿಮೀ",
+    time: "Year Round",
+    timeKn: "ವರ್ಷ ಪೂರ್ತಿ",
+    fee: "Free",
+    tags: ["Heritage", "Historic", "Town"],
+    desc: "Pandavapura is a historic town with legendary connections to the Pandavas of Mahabharata. Thonnur Lake nearby is a popular picnic spot. The town has several ancient temples and is known for its rich cultural heritage.",
+    descKn: "ಪಾಂಡವಪುರ ಐತಿಹಾಸಿಕ ಪ್ರಾಮುಖ್ಯತೆ ಹೊಂದಿದ ಪಟ್ಟಣ. ತೊಣ್ಣೂರು ಕೆರೆ ಜನಪ್ರಿಯ ವಿಹಾರ ತಾಣ.",
+    mapsUrl: "https://maps.google.com/?q=Pandavapura+Karnataka",
+    featured: false
+  },
+  {
+    id: 5,
+    name: "Shivanasamudra Falls",
+    kn: "ಶಿವನಸಮುದ್ರ ಜಲಪಾತ",
+    category: "water",
+    emoji: "🌊",
+    bgClass: "bg-water",
+    dist: "65 km",
+    distKn: "65 ಕಿಮೀ",
+    time: "Aug – Jan",
+    timeKn: "ಆಗಸ್ಟ್ – ಜನವರಿ",
+    fee: "₹20 per person",
+    tags: ["Waterfall", "Nature", "Scenic"],
+    desc: "Shivanasamudra is one of India's first hydroelectric power stations. The Kaveri River splits into two arms here, creating the spectacular twin waterfalls — Gaganachukki and Bharachukki. The monsoon view is simply stunning.",
+    descKn: "ಶಿವನಸಮುದ್ರ ಭಾರತದ ಮೊದಲ ಜಲವಿದ್ಯುತ್ ಕೇಂದ್ರಗಳಲ್ಲಿ ಒಂದು. ಗಗನಚುಕ್ಕಿ ಮತ್ತು ಭರಚುಕ್ಕಿ ಜಲಪಾತಗಳು ಅದ್ಭುತ ನೋಟ ನೀಡುತ್ತವೆ.",
+    mapsUrl: "https://maps.google.com/?q=Shivanasamudra+Falls",
+    featured: true
+  },
+  {
+    id: 6,
+    name: "Sivasamudram Island",
+    kn: "ಸಿವಾಸಮುದ್ರಂ ದ್ವೀಪ",
+    category: "water",
+    emoji: "🏝️",
+    bgClass: "bg-water",
+    dist: "65 km",
+    distKn: "65 ಕಿಮೀ",
+    time: "Oct – Feb",
+    timeKn: "ಅಕ್ಟೋಬರ್ – ಫೆಬ್ರವರಿ",
+    fee: "Free",
+    tags: ["Island", "Nature", "Kaveri"],
+    desc: "A beautiful island formed where the Kaveri river splits. Perfect for nature walks, photography, and peaceful relaxation surrounded by the Kaveri.",
+    descKn: "ಕಾವೇರಿ ನದಿ ಎರಡು ಭಾಗವಾಗುವ ಸ್ಥಳದಲ್ಲಿ ರೂಪುಗೊಂಡ ದ್ವೀಪ. ಶಾಂತ ವಾತಾವರಣ ಮತ್ತು ಫೋಟೋಗ್ರಫಿಗೆ ಸೂಕ್ತ.",
+    mapsUrl: "https://maps.google.com/?q=Sivasamudram+Island",
+    featured: false
+  },
+  {
+    id: 7,
+    name: "Nityodhaya Girijamma Temple",
+    kn: "ನಿತ್ಯೋದಯ ಗಿರಿಜಮ್ಮ ದೇವಾಲಯ",
+    category: "temple",
+    emoji: "⛩️",
+    bgClass: "bg-temple",
+    dist: "5 km",
+    distKn: "5 ಕಿಮೀ",
+    time: "Year Round",
+    timeKn: "ವರ್ಷ ಪೂರ್ತಿ",
+    fee: "Free",
+    tags: ["Temple", "Local", "Hillside"],
+    desc: "A popular local hilltop temple dedicated to Girijamma. Offers a panoramic view of Mandya town and the sugarcane fields. Ideal for morning visits.",
+    descKn: "ಮಂಡ್ಯ ಪಟ್ಟಣ ಮತ್ತು ಕಬ್ಬಿನ ಗದ್ದೆಗಳ ಸುಂದರ ನೋಟ ಕಾಣಬಹುದಾದ ದೇವಿ ಗಿರಿಜಮ್ಮ ದೇವಾಲಯ.",
+    mapsUrl: "https://maps.google.com/?q=Girijamma+Temple+Mandya",
+    featured: false
+  },
+  {
+    id: 8,
+    name: "Krishnarajapete (K.R.Pete)",
+    kn: "ಕೃಷ್ಣರಾಜಪೇಟೆ",
+    category: "heritage",
+    emoji: "🏘️",
+    bgClass: "bg-heritage",
+    dist: "38 km",
+    distKn: "38 ಕಿಮೀ",
+    time: "Year Round",
+    timeKn: "ವರ್ಷ ಪೂರ್ತಿ",
+    fee: "Free",
+    tags: ["Heritage", "Market", "Town"],
+    desc: "K.R.Pete is a historic market town famous for its silk trade. Visit local markets to buy authentic Mysore silk sarees and traditional handicrafts.",
+    descKn: "ಕೃಷ್ಣರಾಜಪೇಟೆ ರೇಷ್ಮೆ ವ್ಯಾಪಾರಕ್ಕೆ ಪ್ರಸಿದ್ಧ ಐತಿಹಾಸಿಕ ಪಟ್ಟಣ. ಮೈಸೂರು ರೇಷ್ಮೆ ಸೀರೆ ಖರೀದಿಸಲು ಉತ್ತಮ ಸ್ಥಳ.",
+    mapsUrl: "https://maps.google.com/?q=Krishnarajapete+Karnataka",
+    featured: false
+  },
+  {
+    id: 9,
+    name: "Gorur Dam",
+    kn: "ಗೊರೂರು ಅಣೆಕಟ್ಟು",
+    category: "water",
+    emoji: "🌁",
+    bgClass: "bg-water",
+    dist: "55 km",
+    distKn: "55 ಕಿಮೀ",
+    time: "Oct – Jan",
+    timeKn: "ಅಕ್ಟೋಬರ್ – ಜನವರಿ",
+    fee: "Free",
+    tags: ["Dam", "Scenic", "Riverside"],
+    desc: "Gorur Dam is built across the Hemavathi river and is a popular scenic spot. The backwaters of the dam offer serene boat rides and sunset views.",
+    descKn: "ಹೇಮಾವತಿ ನದಿ ಅಡ್ಡ ನಿರ್ಮಿಸಲಾದ ಅಣೆಕಟ್ಟು. ಸೂರ್ಯಾಸ್ತ ನೋಟ ಮತ್ತು ದೋಣಿ ವಿಹಾರಕ್ಕೆ ಪ್ರಸಿದ್ಧ.",
+    mapsUrl: "https://maps.google.com/?q=Gorur+Dam+Hassan",
+    featured: false
+  },
+  {
+    id: 10,
+    name: "Brindavan Gardens",
+    kn: "ಬೃಂದಾವನ ಉದ್ಯಾನ",
+    category: "water",
+    emoji: "🌺",
+    bgClass: "bg-wildlife",
+    dist: "19 km",
+    distKn: "19 ಕಿಮೀ",
+    time: "Oct – Feb",
+    timeKn: "ಅಕ್ಟೋಬರ್ – ಫೆಬ್ರವರಿ",
+    fee: "₹30 per person",
+    tags: ["Garden", "Fountain", "Evening"],
+    desc: "Brindavan Gardens is one of India's most beautiful terrace gardens situated at the base of KRS Dam. The spectacular musical fountains, illuminated at night, attract thousands of visitors. Boating in the reservoir is also available.",
+    descKn: "ಬೃಂದಾವನ ಭಾರತದ ಅತ್ಯಂತ ಸುಂದರ ಉದ್ಯಾನಗಳಲ್ಲಿ ಒಂದು. ರಾತ್ರಿ ಬೆಳಗುವ ಸಂಗೀತ ಕಾರಂಜಿ ಎಲ್ಲರನ್ನು ಆಕರ್ಷಿಸುತ್ತದೆ.",
+    mapsUrl: "https://maps.google.com/?q=Brindavan+Gardens+Mysore",
+    featured: false
+  },
+  {
+    id: 11,
+    name: "Mandya City Museum",
+    kn: "ಮಂಡ್ಯ ನಗರ ವಸ್ತು ಸಂಗ್ರಹಾಲಯ",
+    category: "heritage",
+    emoji: "🏺",
+    bgClass: "bg-heritage",
+    dist: "1 km",
+    distKn: "1 ಕಿಮೀ",
+    time: "9 AM – 5 PM",
+    timeKn: "ಬೆಳಗ್ಗೆ 9 – ಸಂಜೆ 5",
+    fee: "₹10 per person",
+    tags: ["Museum", "History", "Culture"],
+    desc: "Mandya City Museum showcases the district's rich cultural history, ancient artefacts, agricultural heritage, and local art forms. Ideal for history enthusiasts.",
+    descKn: "ಮಂಡ್ಯ ಜಿಲ್ಲೆಯ ಸಂಸ್ಕೃತಿ, ಇತಿಹಾಸ ಮತ್ತು ಕೃಷಿ ಪರಂಪರೆಯನ್ನು ಪ್ರದರ್ಶಿಸುವ ವಸ್ತು ಸಂಗ್ರಹಾಲಯ.",
+    mapsUrl: "https://maps.google.com/?q=Mandya+Museum",
+    featured: false
+  },
+  {
+    id: 12,
+    name: "Malavalli Hills",
+    kn: "ಮಳವಳ್ಳಿ ಗುಡ್ಡಗಳು",
+    category: "hills",
+    emoji: "⛰️",
+    bgClass: "bg-hills",
+    dist: "42 km",
+    distKn: "42 ಕಿಮೀ",
+    time: "Oct – Feb",
+    timeKn: "ಅಕ್ಟೋಬರ್ – ಫೆಬ್ರವರಿ",
+    fee: "Free",
+    tags: ["Hills", "Trekking", "Scenic"],
+    desc: "The hills around Malavalli offer excellent trekking routes with stunning views of the Kaveri plains. Bird watching and nature photography are also popular activities.",
+    descKn: "ಮಳವಳ್ಳಿ ಬೆಟ್ಟಗಳು ಟ್ರೆಕ್ಕಿಂಗ್ ಮತ್ತು ಪಕ್ಷಿ ವೀಕ್ಷಣೆಗೆ ಪ್ರಸಿದ್ಧ.",
+    mapsUrl: "https://maps.google.com/?q=Malavalli+Karnataka",
+    featured: false
+  }
+];
+
+let lang = 'en';
+let currentPlace = null;
+let favorites = JSON.parse(localStorage.getItem('mandya_fav') || '[]');
+let activeFilter = 'all';
+
+// ===== INIT =====
+function init() {
+  renderFeatured();
+  renderGrid(places);
+  renderMapList();
+  renderFavList();
+}
+
+function renderFeatured() {
+  const el = document.getElementById('featuredList');
+  const featured = places.filter(p => p.featured);
+  el.innerHTML = featured.map(p => `
+    <div class="featured-card" onclick="openDetail(${p.id})">
+      <div class="emoji-img ${p.bgClass}" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:70px">${p.emoji}</div>
+      <div class="overlay">
+        <div class="place-name">${p.name}</div>
+        <div class="place-kn">${p.kn}</div>
+      </div>
+      <div class="badge">⭐ Must Visit</div>
+    </div>
+  `).join('');
+}
+
+function renderGrid(list) {
+  const el = document.getElementById('placeGrid');
+  el.innerHTML = list.map(p => `
+    <div class="place-card" onclick="openDetail(${p.id})">
+      <div class="emoji-img ${p.bgClass}">${p.emoji}</div>
+      <div class="card-info">
+        <div class="card-name">${lang === 'kn' ? p.kn : p.name}</div>
+        <div class="card-kn">${lang === 'kn' ? p.name : p.kn}</div>
+        <div class="card-meta">📍 <span class="card-dist">${p.dist}</span> from Mandya</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderMapList() {
+  const el = document.getElementById('mapList');
+  el.innerHTML = places.map(p => `
+    <div class="map-item" onclick="window.open('${p.mapsUrl}','_blank')">
+      <span class="mi-icon">${p.emoji}</span>
+      <div>
+        <div class="mi-name">${p.name}</div>
+        <div class="mi-kn">${p.kn}</div>
+      </div>
+      <div class="mi-dist">${p.dist}</div>
+    </div>
+  `).join('');
+}
+
+function renderFavList() {
+  const el = document.getElementById('favList');
+  const empty = document.getElementById('favEmpty');
+  if (!favorites.length) {
+    el.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  const favPlaces = places.filter(p => favorites.includes(p.id));
+  el.innerHTML = favPlaces.map(p => `
+    <div class="map-item" onclick="openDetail(${p.id})">
+      <span class="mi-icon">${p.emoji}</span>
+      <div>
+        <div class="mi-name">${p.name}</div>
+        <div class="mi-kn">${p.kn}</div>
+      </div>
+      <div style="color:red;font-size:20px;margin-left:auto">❤️</div>
+    </div>
+  `).join('');
+}
+
+function openDetail(id) {
+  currentPlace = places.find(p => p.id === id);
+  const p = currentPlace;
+  document.getElementById('detailEmoji').textContent = p.emoji;
+  document.getElementById('detailHero').style.background = `var(--bg)`;
+  document.getElementById('detailTitle').textContent = lang === 'kn' ? p.kn : p.name;
+  document.getElementById('detailKn').textContent = lang === 'kn' ? p.name : p.kn;
+  document.getElementById('detailDist').textContent = p.dist + ' from Mandya City';
+  document.getElementById('detailDistKn').textContent = p.distKn + ' ಮಂಡ್ಯ ನಗರದಿಂದ';
+  document.getElementById('detailTime').textContent = p.time;
+  document.getElementById('detailTimeKn').textContent = p.timeKn;
+  document.getElementById('detailFee').textContent = p.fee;
+  document.getElementById('detailTags').innerHTML = p.tags.map(t => `<span class="tag">${t}</span>`).join('');
+  document.getElementById('detailDesc').textContent = p.desc;
+  document.getElementById('detailDescKn').textContent = p.descKn;
+  const isFav = favorites.includes(p.id);
+  document.getElementById('favBtn').textContent = isFav ? '❤️' : '🤍';
+  showScreen('detail', null);
+  window.scrollTo(0, 0);
+}
+
+function goBack() {
+  showScreen('home', document.querySelector('.nav-item'));
+}
+
+function toggleFav() {
+  if (!currentPlace) return;
+  const id = currentPlace.id;
+  if (favorites.includes(id)) {
+    favorites = favorites.filter(f => f !== id);
+    document.getElementById('favBtn').textContent = '🤍';
+    showToast('Removed from Saved | ಉಳಿಸಿದ ಪಟ್ಟಿಯಿಂದ ತೆಗೆದಿದೆ');
+  } else {
+    favorites.push(id);
+    document.getElementById('favBtn').textContent = '❤️';
+    showToast('Saved! | ಉಳಿಸಲಾಗಿದೆ!');
+  }
+  localStorage.setItem('mandya_fav', JSON.stringify(favorites));
+  renderFavList();
+}
+
+function openMaps() {
+  if (currentPlace) window.open(currentPlace.mapsUrl, '_blank');
+}
+
+function sharePlace() {
+  if (!currentPlace) return;
+  if (navigator.share) {
+    navigator.share({ title: currentPlace.name, text: currentPlace.desc, url: window.location.href });
+  } else {
+    navigator.clipboard.writeText(currentPlace.name + ' | ' + currentPlace.kn + ' | ' + currentPlace.mapsUrl);
+    showToast('Link copied! | ಲಿಂಕ್ ನಕಲಿಸಲಾಗಿದೆ!');
+  }
+}
+
+function openMandyaMaps() {
+  window.open('https://maps.google.com/?q=Mandya+Karnataka', '_blank');
+}
+
+function filterCat(cat, el) {
+  activeFilter = cat;
+  document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  const filtered = cat === 'all' ? places : places.filter(p => p.category === cat);
+  renderGrid(filtered);
+}
+
+function filterPlaces(query) {
+  const q = query.toLowerCase();
+  const filtered = places.filter(p =>
+    p.name.toLowerCase().includes(q) || p.kn.includes(query) || p.tags.some(t => t.toLowerCase().includes(q))
+  );
+  renderGrid(filtered);
+}
+
+function toggleLang() {
+  lang = lang === 'en' ? 'kn' : 'en';
+  document.getElementById('lang-label').textContent = lang === 'en' ? 'ಕನ್ನಡ' : 'English';
+  // Update all bilingual elements
+  document.querySelectorAll('[data-en]').forEach(el => {
+    el.textContent = lang === 'kn' ? el.dataset.kn : el.dataset.en;
+  });
+  document.querySelectorAll('.cat-chip span[data-en]').forEach(el => {
+    el.textContent = lang === 'kn' ? el.dataset.kn : el.dataset.en;
+  });
+  // Re-render grid
+  const filtered = activeFilter === 'all' ? places : places.filter(p => p.category === activeFilter);
+  renderGrid(filtered);
+  showToast(lang === 'kn' ? '🇮🇳 ಕನ್ನಡಕ್ಕೆ ಬದಲಾಯಿಸಲಾಗಿದೆ' : '🔄 Switched to English');
+}
+
+function showScreen(id, navEl) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (navEl && id !== 'detail') {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    navEl.classList.add('active');
+  }
+  window.scrollTo(0, 0);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Register service worker for PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+
+init();
+</script>
+</body>
+</html>
